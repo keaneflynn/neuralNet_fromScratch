@@ -1,21 +1,21 @@
 import numpy as np
 
 
-def ReLU(x):
+def ReLU(Z):
     #activation function of choice for CNN based neural networks (Goodfellow et al. 2016)
-    return max(0,x)
+    return max(0,Z)
 
-def LeakyReLU(x):
-    return max(0.1*x, x)
+def LeakyReLU(Z):
+    return max(0.1*Z, Z)
 
-def Sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+def Sigmoid(Z):
+    return 1 / (1 + np.exp(-Z))
 
-def TanH(x):
-    return (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+def TanH(Z):
+    return (np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z))
 
-def Softmax(x):
-    return np.exp(x) / sum(np.exp(x))
+def Softmax(Z):
+    return np.exp(Z) / sum(np.exp(Z))
     
 
 class forwardFeed:
@@ -31,13 +31,11 @@ class forwardFeed:
         self.W3 = np.random.rand(self.n_H3, self.n_H2) - 0.5
         self.B3 = np.random.rand(self.n_H3, 1) - 0.5
 
-
-    def HL1_fw(self, x):
+    def HL1_fw(self, Z):
         #Hidden layer 1 
-        Z1 = np.matmul(self.W1, x) + self.B1
+        Z1 = np.matmul(self.W1, Z) + self.B1
         A1 = ReLU(Z1) #Can be swapped out for other above activation functions
         return Z1, A1
-
 
     def HL2_fw(self, A1):
         #Hidden layer 2
@@ -45,7 +43,6 @@ class forwardFeed:
         A2 = LeakyReLU(Z2) #Can be swapped out for other above activation functions
         return Z2, A2
     
-
     def HL3_fw(self, A2):
         #Output layer
         Z3 = np.matmul(self.W3, A2) + self.B3

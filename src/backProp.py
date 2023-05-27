@@ -9,29 +9,24 @@ test = pd.read_csv(r'~/code/python/neuralNet_fromScratch/data/test.csv').T
 print(train.shape[0])
 ###
 
-
 class Train:
     def __init__(self, train, test, alpha):
-        self.train = pd.read_csv(train).T
-        self.test = pd.read_csv(test).T
+        self.train = pd.read_csv(train).T #Transpose data
+        self.test = pd.read_csv(test).T #Transpose data
         self.train = np.array(self.train)
         self.test = np.array(self.test)
         j,k = self.train.shape
         l,m = self.test.shape
         np.random.shuffle(self.train)
         np.random.shuffle(self.test)
-        self.train_data = self.train[1:k] / 255
-        self.test_data = self.test[1:m] / 255
-        self.train_labs = self.train[0]
+        self.train_data = self.train[1:k] / 255 #normalise data to 0-1 values for pixel color
+        self.test_data = self.test[1:m] / 255 #normalise data to 0-1 values for pixel color
+        self.train_labs = self.train[0] 
         self.test_labs = self.test[0]
         self.alpha = alpha
         self.nh_0 = self.train_data.shape[0]
         self.nh_1 = 256 #Hidden layer 1 dimension, adjust as desired
         self.nh_2 = 64 #Hidden layer 2 dimension, adjust as desired
-        self.W1 = 0
-        self.W2 = 0
-        self.B1 = 0
-        self.B2 = 0
 
     def __new__(self):
         return self.train_data, self.test_data, self.train_labs, self.test_labs
@@ -44,17 +39,27 @@ class Train:
     def dReLU(Z):
         #Derivative of ReLU function, slope of 1 if Z > 0, else is 0
         return Z > 0
+    
+    def dLeaky_ReLU(Z):
+        if Z > 0:
+            return Z > 0
+        else:
+            return 0.1
 
     def HL1_bk(self):
-        #Hidden layer 1
+        #Hidden layer 1 backpropogation iteration from ReLU to Input layer
+
         return x
 
     def HL2_bk(self):
-        #Hidden layer 2
+        #Hidden layer 2 backpropogation iteration from leaky ReLU to HL1
         return x
 
     def HL3_bk(self):
-        #Hidden layer 2
+        #Hidden layer 3 backpropogation iteration from softmax to HL2
+        return x
+    
+    def UpdateWB(self):
         return x
 
     def ceLoss(self, y, y_soft):
