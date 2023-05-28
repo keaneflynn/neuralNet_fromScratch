@@ -36,7 +36,7 @@ def main():
         dZ1, dW1, dB1 = Train.HL1_bk(Z1, W2, dZ2, train_data)
 
         #6) Update weights and bias values for next iteration (new weight = previous weight - learning rate (alpha) * derivative weight from backprop step)
-        W1, B1, W2, B2, W3, B3 = Train.UpdateWB('alpha', dW1, dB2, dW2, dB2, dW3, dB3)
+        W1, B1, W2, B2, W3, B3 = Train.UpdateWB('alpha', dW1, dB1, dW2, dB2, dW3, dB3)
 
         if step % train_data.shape[1] == 0:
             print("Iteration", step, "loss: ", loss)
