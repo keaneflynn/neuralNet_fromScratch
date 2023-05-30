@@ -3,10 +3,10 @@ import numpy as np
 
 def ReLU(Z):
     #activation function of choice for CNN based neural networks (Goodfellow et al. 2016)
-    return max(0,Z)
+    return np.maximum(0,Z)
 
 def LeakyReLU(coef, Z):
-    return max(coef * Z, Z)
+    return np.maximum(coef * Z, Z)
 
 def Sigmoid(Z):
     return 1 / (1 + np.exp(-Z))
@@ -18,10 +18,10 @@ def Softmax(Z):
     return np.exp(Z) / sum(np.exp(Z))
     
 
-class forwardFeed:
+class ForwardFeed:
     def __init__(self, train):
         self.train_data = train
-        self.input_dims = train.shape[1] #Input layer dimensions
+        self.input_dims = train.shape[0] #Input layer dimensions
         self.n_H1 = 256 #First hidden layer
         self.n_H2 = 64 #Second hidden layer
         self.n_H3 = 10 #Output nodes
@@ -44,7 +44,7 @@ class forwardFeed:
     def HL2_fw(self, W2, B2, A1):
         #Hidden layer 2
         Z2 = np.matmul(W2, A1) + B2
-        A2 = LeakyReLU(Z2) #Can be swapped out for other above activation functions
+        A2 = LeakyReLU(0.1, Z2) #Can be swapped out for other above activation functions
         return Z2, A2
     
     def HL3_fw(self, W3, B3, A2):

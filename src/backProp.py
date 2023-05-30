@@ -6,18 +6,15 @@ from keras.utils import to_categorical
 def Onehot(train_labs):
     #N=10 vector of truth labels for each training iteration
     #Convert from sparse labels to categorical (ie [4] to [0,0,0,0,1,0,0,0,0,0])
-    return to_categorical(train_labs)
+    return np.array(train_labs[:, None]==np.arange(10), dtype=np.float32).T
 
 def dReLU(Z):
     #Derivative of ReLU function, slope of 1 if Z > 0, else is 0
     return Z > 0
 
 def dLeaky_ReLU(coef, Z):
-    if Z > 0:
-        return Z > 0
-    else:
-        return coef
-
+    return coef if Z.any() < 0 else 1
+    
 
 class Train:
     def __init__(self, train, test, alpha):
@@ -32,11 +29,11 @@ class Train:
         self.train_labs = self.train[0] 
         self.test_labs = self.test[0]
         self.alpha = alpha
-        self.nh_0 = self.train_data.shape[1]
+        self.nh_0 = self.train_data.shape[0]
         self.nh_1 = 256 #Hidden layer 1 dimension, adjust as desired
         self.nh_2 = 64 #Hidden layer 2 dimension, adjust as desired
 
-    def __new__(self):
+    def DataRet(self):
         return self.train_data, self.test_data, self.train_labs, self.test_labs
 
     def HL1_bk(self, Z1, W2, dZ2, train_data):
@@ -60,19 +57,19 @@ class Train:
         dB3 = (1/self.nh_0) * np.sum(dZ3) #perhaps keep axis and dimension values if the matrix dont matrices
         return dZ3, dW3, dB3
     
-    def UpdateWB(self, alpha, dW1, dB1, dW2, dB2, dW3, dB3):
+    def UpdateWB(self, W1, B1, W2, B2, W3, B3, dW1, dB1, dW2, dB2, dW3, dB3):
         #Update weight and bias matrices for each hidden layer based on backpropogation results
-        W1 = W1 - alpha * dW1
-        B1 = B1 - alpha * dB1
-        W2 = W2 - alpha * dW2
-        B2 = B2 - alpha * dB2
-        W3 = W3 - alpha * dW3
-        B3 = B3 - alpha * dB3
+        W1 = W1 - self.alpha * dW1
+        B1 = B1 - self.alpha * dB1
+        W2 = W2 - self.alpha * dW2
+        B2 = B2 - self.alpha * dB2
+        W3 = W3 - self.alpha * dW3
+        B3 = B3 - self.alpha * dB3
         return W1, B1, W2, B2, W3, B3 
 
     def ceLoss(self, y, y_soft):
         #Cross-entropy loss function for categorical output layer
-        loss_sum = np.sum(np.multiply(y, np.log(y_soft))) #y = validation array from oneHot, y_soft = softmax calculation at final output layer 
+        loss_sum = np.sum(np.multiply(Onehot(y), np.log(y_soft)))  #y = validation array from oneHot, y_soft = softmax calculation at final output layer 
         n = self.train.shape[1]
         loss_avg = -(1/n) * loss_sum
         return loss_avg
