@@ -3,6 +3,7 @@ from src.forProp import ForwardFeed
 from argparse import ArgumentParser
 from time import time
 import numpy as np
+import pickle
 
 
 
@@ -51,12 +52,11 @@ def main():
     print("Elapsed training time: ", training_time, "minutes")
 
 
-    test = [W1, B1, W2, B2, W3, B3]
-    with open('data/output.weights', 'w') as f:
-        for line in test:
-            f.write(f'test')
-        print('Weights and bias values written!')
-
+    weights = [W1, B1, W2, B2, W3, B3]
+    with open('data/output.weights', 'wb') as f:
+        pickle.dump(weights, f)
+    print('Weights and bias values written!')
+    
 
 if __name__ == '__main__':
     main()
