@@ -17,24 +17,19 @@ def dLeaky_ReLU(coef, Z):
     
 
 class Train:
-    def __init__(self, train, test, alpha):
+    def __init__(self, train, alpha):
         self.train = pd.read_csv(train).T #Transpose data
-        self.test = pd.read_csv(test).T #Transpose data
         self.train = np.array(self.train)
-        self.test = np.array(self.test)
-        j,k = self.train.shape
-        l,m = self.test.shape
+        _,k = self.train.shape
         self.train_data = self.train[1:k] / 255 #normalise data to 0-1 values for pixel color
-        self.test_data = self.test[1:m] / 255 #normalise data to 0-1 values for pixel color
-        self.train_labs = self.train[0] 
-        self.test_labs = self.test[0]
+        self.train_labs = self.train[0]
         self.alpha = alpha
         self.nh_0 = self.train_data.shape[0]
         self.nh_1 = 256 #Hidden layer 1 dimension, adjust as desired
         self.nh_2 = 64 #Hidden layer 2 dimension, adjust as desired
 
     def DataRet(self):
-        return self.train_data, self.test_data, self.train_labs, self.test_labs
+        return self.train_data, self.train_labs
 
     def HL1_bk(self, Z1, W2, dZ2, train_data):
         #Hidden layer 1 backpropogation iteration from ReLU to Input layer
@@ -57,7 +52,8 @@ class Train:
         dB3 = (1/self.nh_0) * np.sum(dZ3) #perhaps keep axis and dimension values if the matrix dont matrices
         return dZ3, dW3, dB3
     
-    def UpdateWB(self, W1, B1, W2, B2, W3, B3, dW1, dB1, dW2, dB2, dW3, dB3):
+    def UpdateWB(self, W1, B1, W2, B2, W3, B3, 
+                 dW1, dB1, dW2, dB2, dW3, dB3):
         #Update weight and bias matrices for each hidden layer based on backpropogation results
         W1 = W1 - self.alpha * dW1
         B1 = B1 - self.alpha * dB1

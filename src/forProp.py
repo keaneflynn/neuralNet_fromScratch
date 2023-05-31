@@ -6,6 +6,7 @@ def ReLU(Z):
     return np.maximum(0,Z)
 
 def LeakyReLU(coef, Z):
+    #idk its like the activation for the first layer but leakier?
     return np.maximum(coef * Z, Z)
 
 def Sigmoid(Z):
