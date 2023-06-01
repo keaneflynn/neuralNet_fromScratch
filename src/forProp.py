@@ -19,7 +19,7 @@ def Softmax(Z):
     return np.exp(Z) / sum(np.exp(Z))
     
 
-class ForwardFeed:
+class ForwardFeed_Train:
     def __init__(self, train):
         self.train_data = train
         self.input_dims = train.shape[0] #Input layer dimensions
@@ -53,3 +53,33 @@ class ForwardFeed:
         Z3 = np.matmul(W3, A2) + B3
         A3 = Softmax(Z3)
         return Z3, A3
+    
+
+class ForwardFeed_Test:
+    def __init__(self, test_data, wb, index):
+        _,h = test_data.shape
+        self.test_data = test_data[1:h]
+        self.test_labs = test_data[0]
+        self.wb = wb
+        self.index = index
+
+    def HL1_fw(self):
+        Z1 = np.matmul(self.wb[0], self.test_data) + self.wb[1]
+        A1 = ReLU(Z1)
+        return A1
+
+    def HL2_fw(self, A1):
+        Z2 = np.matmul(self.wb[2], A1) + self.wb[3]
+        A2 = LeakyReLU(0.1, Z2)
+        return A2
+
+    def HL3_fw(self, A2):
+        Z3 = np.matmul(self.wb[4], A2) + self.wb[5]
+        A3 = Softmax(Z3)
+        return A3
+    
+    def predict(self, A3):
+        return 0
+    
+    def imShow(self):
+        return 0 

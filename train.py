@@ -1,5 +1,5 @@
 from src.backProp import Train
-from src.forProp import ForwardFeed
+from src.forProp import ForwardFeed_Train
 from argparse import ArgumentParser
 from time import time
 import numpy as np
@@ -17,7 +17,7 @@ def main():
 
     T = Train(args.training_data, args.alpha) 
     train_data, train_labs = T.DataRet()
-    ff = ForwardFeed(train_data)
+    ff = ForwardFeed_Train(train_data)
     W1, B1, W2, B2, W3, B3 = ff.init_weights()
 
     start_time = time()
