@@ -16,7 +16,13 @@ def main():
         wb = p.load(f)
     
     fft = ForwardFeed_Test(args.test_data, args.weights_file, args.index)
+    A1 = fft.HL1_fw() #Input layer
+    A2 = fft.HL2_fw(A1) #First hidden layer
+    A3 = fft.HL3_fw(A2) #Second hidden layer
 
+    label, pred = fft.predict(A3)
+    print(label)
+    print(pred)  
 
 if __name__ == '__main__':
     main()

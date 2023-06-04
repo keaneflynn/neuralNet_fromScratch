@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 def ReLU(Z):
@@ -57,14 +58,16 @@ class ForwardFeed_Train:
 
 class ForwardFeed_Test:
     def __init__(self, test_data, wb, index):
-        _,h = test_data.shape
-        self.test_data = test_data[1:h]
-        self.test_labs = test_data[0]
+        self.test_data = pd.read_csv(test_data).T
+        j,_ = self.test_data.shape
+        self.test_datum = self.test_data[index][1:j]
+        print(self.test_datum.shape)
+        self.test_lab = self.test_data[index][0]
         self.wb = wb
         self.index = index
 
     def HL1_fw(self):
-        Z1 = np.matmul(self.wb[0], self.test_data) + self.wb[1]
+        Z1 = np.matmul(self.wb[0], self.test_datum) + self.wb[1]
         A1 = ReLU(Z1)
         return A1
 
@@ -79,7 +82,9 @@ class ForwardFeed_Test:
         return A3
     
     def predict(self, A3):
-        return 0
+        pred = np.argmax(A3, 0) 
+        label = self.test_lab
+        return label, pred
     
     def imShow(self):
         return 0 
