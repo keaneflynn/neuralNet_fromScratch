@@ -61,7 +61,6 @@ class ForwardFeed_Test:
         self.test_data = pd.read_csv(test_data).T
         j,_ = self.test_data.shape
         self.test_datum = self.test_data[index][1:j]
-        print(self.test_datum.shape)
         self.test_lab = self.test_data[index][0]
         self.wb = wb
         self.index = index
@@ -82,9 +81,10 @@ class ForwardFeed_Test:
         return A3
     
     def predict(self, A3):
-        pred = np.argmax(A3, 0) 
+        pred = np.argmax(A3, 1) 
         label = self.test_lab
         return label, pred
     
     def imShow(self):
+        image = self.test_datum[,]
         return 0 
