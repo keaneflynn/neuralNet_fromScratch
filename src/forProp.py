@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 
 def ReLU(Z):
@@ -86,5 +87,7 @@ class ForwardFeed_Test:
         return label, pred
     
     def imShow(self):
-        image = self.test_datum[,]
-        return 0 
+        image = self.test_datum.values.reshape((28, 28)) * 255
+        plt.gray()
+        plt.imshow(image, interpolation='nearest')
+        plt.show()

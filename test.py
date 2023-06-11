@@ -25,6 +25,7 @@ def main():
     label, pred = fft.predict(A3)
     print(label)
     print(pred)  
+    fft.imShow()
 
 if __name__ == '__main__':
     main()
